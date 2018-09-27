@@ -1,17 +1,55 @@
-<html>
 
-<head>
-    <title>登录</title>
-</head>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
 
-<body>
-<h1>测试平台</h1>
-    <form  action="/login/" method="get">
-        账号：<input name="username" type="text" placeholder="请输入用户名" ><br>
-        密码：<input name="password" type="password" placeholder="请输入密码"><br>
-        {{ error }} <br>
-        <button id="btn" type="submit">登录</button>
+    <title>测试平台</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/signin.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="floating-labels.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <form class="form-signin" action="/login_action/" method="POST">
+      <div class="text-center mb-4">
+        <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">测试平台</h1>
+      </div>
+
+      <div class="form-label-group">
+          用户名：<input type="text" id="inputEmail" name="username" class="form-control" placeholder="username" required autofocus>
+      </div>
+      <div class="form-label-group">
+          密  码：<input type="password" id="inputPassword" name="password" class="form-control" placeholder="password" required>
+      </div>
+
+      <font color="red">{{ error }}</font> <br>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        {% csrf_token%}
     </form>
-</body>
-
+  </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
