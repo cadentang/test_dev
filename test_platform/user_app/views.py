@@ -1,6 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.views.generic.base import View
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -20,8 +23,20 @@ def login_action(request):
 			user = authenticate(username=username, password=password)
 			if user is not None:
 				login(request, user)
-				return render(request, "login_success.html")
+				request.session["user1"] = username
+				return HttpResponseRedirect("/project_manage/")
 			else:
 				return render(request, "index.html", {"error": "用户名或者密码错误"})
+	else:
+		return render(request, "index.html")
+
+
+@login_required
+def project_manage(request):
+	username = request.session.get("user1", "")
+	return render(request, "project_manage.html", {"user": username})
+
+
+
 
 
