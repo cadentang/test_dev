@@ -68,25 +68,23 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
+                  <th>ID</th>
+                  <th>项目名称</th>
+                  <th>项目描述</th>
+                  <th>项目状态</th>
+                  <th>添加时间</th>
                 </tr>
               </thead>
               <tbody>
+              {% for project in projects %}
                 <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
+                  <td>{{ project.id }}</td>
+                  <td>{{ project.name }}</td>
+                  <td>{{ project.describe }}</td>
+                  <td>{{ project.status }}</td>
+                  <td>{{ project.create_time }}</td>
                 </tr>
-
-
-
-
+              {% endfor %}
               </tbody>
             </table>
           </div>
