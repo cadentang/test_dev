@@ -4,7 +4,7 @@ from django.views.generic.base import View
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Project, Module
+
 
 # Create your views here.
 
@@ -25,18 +25,12 @@ def login_action(request):
 			if user is not None:
 				login(request, user)
 				request.session["user1"] = username
-				return HttpResponseRedirect("/project_manage/")
+				return HttpResponseRedirect("/manage/project_manage/")
 			else:
 				return render(request, "index.html", {"error": "用户名或者密码错误"})
 	else:
 		return render(request, "index.html")
 
-
-@login_required
-def project_manage(request):
-	username = request.session.get("user1", "")
-	project_all = Project.objects.all()
-	return render(request, "project_manage.html", {"user": username, "projects": project_all})
 
 
 @login_required()

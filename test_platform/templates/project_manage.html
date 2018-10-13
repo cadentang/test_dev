@@ -1,28 +1,6 @@
 
-<!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
-    <title>测试平台</title>
-      <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://v3.bootcss.com/assets/js/vendor/holder.min.js"></script>
-
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="https://v3.bootcss.com/examples/dashboard/dashboard.css" rel="stylesheet">
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-  </head>
-
-  <body>
+{% extends "base.html" %}
+{% block content %}
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
@@ -47,11 +25,11 @@
       </div>
     </nav>
 
-    <div class="container-fluid">
+
+  <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
             <li><a href="#">项目管理</a></li>
             <li><a href="#">模块管理</a></li>
             <li><a href="#">用例管理</a></li>
@@ -62,8 +40,13 @@
             <li><a href="#">权限管理</a></li>
           </ul>
         </div>
+
+        {% if type == "list" %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h2 class="sub-header">例子</h2>
+          <h2 class="sub-header">项目管理
+          <button type="button" class="btn btn-lg btn-primary" style="float: right;"
+          onclick="window.location.href='/manage/add_project/'">新增</button>
+          </h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -89,18 +72,33 @@
             </table>
           </div>
         </div>
-      </div>
-    </div>
+        {% endif %}
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script src="../../assets/js/vendor/holder.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+        {% if type == "add" %}
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+          <h3 class="sub-header">添加项目</h3>
+          <div class="table-responsive">
+             <form id="add_project_form" method="post" action="{% url 'add_project' %}" >
+                {% csrf_token %}
+                <label>名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</label>
+                <input  type="text" id="project_name" name="name" value="{{ add_project_form.name.value|default_if_none:'' }}" placeholder="请输入您的项目名称" />
+                <label>描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;述</label>
+                <input type="text" id="id_describe" name="describe"  value="{{ add_project_form.describe.value }}" placeholder="请输入你的项目描述" />
+                <label>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态</label>
+                <input type="radio" name="status" value="1" checked >开启
+                <input type="radio" name="status" value="0">关闭
+
+                <input class="btn btn-lg btn-primary " id="add_project_btn" type="submit" value="提交" />
+             </form>
+          </div>
+
+        </div>
+
+        {% endif %}
+      </div>
+  </div>
+
+  {% endblock %}
+
