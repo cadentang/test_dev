@@ -4,7 +4,10 @@ from django import forms
 from .models import Project
 
 
-class AddProjectForm(forms.Form):
-	name = forms.CharField(required=True)
-	describe = forms.CharField(required=True)
-	status = forms.BooleanField(required=True)
+class AddProjectForm(forms.ModelForm):
+	#name = forms.CharField(label="项目名称", required=True)
+	#describe = forms.CharField(label='项目描述', required=True, widget=forms.Textarea)
+	#status = forms.BooleanField(label='状态', required=False)
+	class Meta:
+		model = Project
+		exclude = ['create_time']

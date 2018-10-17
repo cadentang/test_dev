@@ -11,6 +11,7 @@ class Project(models.Model):
 		verbose_name = "项目管理"
 		verbose_name_plural = verbose_name
 
+
 	def __str__(self):
 		return self.name
 

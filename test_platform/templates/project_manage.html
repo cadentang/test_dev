@@ -56,6 +56,7 @@
                   <th>项目描述</th>
                   <th>项目状态</th>
                   <th>添加时间</th>
+                  <th>操作</th>
                 </tr>
               </thead>
               <tbody>
@@ -66,6 +67,24 @@
                   <td>{{ project.describe }}</td>
                   <td>{{ project.status }}</td>
                   <td>{{ project.create_time }}</td>
+                  <td>
+
+                      <div class="btn-group operation">
+                          <!--
+                      <button id="btn_edit" type="button" class="btn bg-info">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+                      </button>
+                      <button id="btn_delete" type="button" class="btn btn-success">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                      </button>-->
+                      <button class="btn btn-sm btn-info " id="alter_project_btn" type="button"
+                              onclick="window.location.href='/manage/edit_project/{{project.id}}'" />编辑</button>
+                      <button class="btn btn-sm btn-success " id="project_btn" type="button"  />查看</button>
+                      <button class="btn btn-sm btn-danger " id="delete_project_btn" type="button"  />删除</button>
+                      </div>
+
+                  </td>
+
                 </tr>
               {% endfor %}
               </tbody>
@@ -75,28 +94,52 @@
         {% endif %}
 
         {% if type == "add" %}
-
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
           <h3 class="sub-header">添加项目</h3>
           <div class="table-responsive">
              <form id="add_project_form" method="post" action="{% url 'add_project' %}" >
                 {% csrf_token %}
+                {{ form.as_p }}
+                 {{ msg }}
+                 <button type="submit" class="btn btn-success">创建</button>
+
+                 <!--
                 <label>名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</label>
                 <input  type="text" id="project_name" name="name" value="{{ add_project_form.name.value|default_if_none:'' }}" placeholder="请输入您的项目名称" />
+                <br>
                 <label>描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;述</label>
                 <input type="text" id="id_describe" name="describe"  value="{{ add_project_form.describe.value }}" placeholder="请输入你的项目描述" />
+                <br>
                 <label>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态</label>
                 <input type="radio" name="status" value="1" checked >开启
                 <input type="radio" name="status" value="0">关闭
-
+                <br>
                 <input class="btn btn-lg btn-primary " id="add_project_btn" type="submit" value="提交" />
+
+                <input class="btn btn-lg btn-primary " id="return_project_btn"  value="返回"
+                       onclick="window.location.href='/manage/project_manage/'"/> -->
              </form>
           </div>
 
         </div>
-
         {% endif %}
+
+        {% if type == 'edit'%}
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h3 class="sub-header">编辑项目</h3>
+                <div class="table-responsive">
+                    <form action="/manage/edit_project/" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        {{ msg }}
+                        <button type="submit" class="btn btn-success">保存</button>
+
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
       </div>
   </div>
 
