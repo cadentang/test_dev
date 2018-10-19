@@ -26,7 +26,5 @@ urlpatterns = [
     path('login_action/', LoginView.as_view(), name="login"),
     #path('project_manage/', views.project_manage),
 	path('logout_view/', views.logout_view),
-	path('manage/', include('project_app.urls')),
-
-
+	path('manage/', include('project_app.urls')),#project_app应用url
 ]
