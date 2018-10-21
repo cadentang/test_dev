@@ -30,8 +30,8 @@
       <div class="row">
         <div  class=" col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">项目管理</a></li>
-            <li><a href="/manage/module_manage/">模块管理</a></li>
+            <li ><a href="/manage/project_manage/">项目管理</a></li>
+            <li class="active"><a href="#">模块管理</a></li>
             <li><a href="#">用例管理</a></li>
             <li><a href="#">任务管理</a></li>
             <li><a href="#">MockServer</a></li>
@@ -43,9 +43,9 @@
 
         {% if type == "list" %}
         <div class=" col-sm-8 col-sm-offset-1 col-md-10 col-md-offset-2 main">
-          <h2 class="sub-header">项目管理
+          <h2 class="sub-header">模块管理
           <button type="button" class="btn btn-lg btn-primary" style="float: right;"
-                onclick="window.location.href='/manage/add_project/'">
+                onclick="window.location.href='/manage/add_module/'">
                 新增</button>
           </h2>
           <div class="table-responsive">
@@ -54,33 +54,35 @@
                 <tr>
                   <th>ID</th>
                   <th>项目名称</th>
-                  <th>项目描述</th>
-                  <th>项目状态</th>
+                  <th>模块名称</th>
+                  <th>模块描述</th>
+                  <th>模块状态</th>
                   <th>添加时间</th>
                   <th>操作</th>
                 </tr>
               </thead>
               <tbody>
-              {% for project in projects %}
+              {% for module in modules %}
                 <tr>
-                  <td>{{ project.id }}</td>
-                  <td>{{ project.name }}</td>
-                  <td>{{ project.describe }}</td>
-                  <td>{{ project.status }}</td>
-                  <td>{{ project.create_time }}</td>
-                  <td>
+                    <td>{{ module.id }}</td>
+                    <td>{{ module.project }}</td>
+                    <td>{{ module.name }}</td>
+                    <td>{{ module.describe }}</td>
+                    <td>{{ module.status }}</td>
+                     <td>{{ module.create_time }}</td>
+                    <td>
                       <div class="btn-group operation">
-                      <button class="btn btn-sm btn-info " id="alter_project_btn" type="button"
-                                onclick="window.location.href='/manage/edit_project/{{project.id}}'"/>
+                      <button class="btn btn-sm btn-info " id="alter_module_btn" type="button"
+                                onclick="window.location.href='/manage/edit_module/{{module.id}}'"/>
                                 编辑</button>
                       </div>
                       <div class="btn-group operation">
-                      <button class="btn btn-sm btn-success " id="project_btn" type="button"
-                      onclick="window.location.href='/manage/view_project/{{project.id}}'"/>查看</button>
+                      <button class="btn btn-sm btn-success " id="module_btn" type="button"
+                      onclick="window.location.href='/manage/view_module/{{module.id}}'"/>查看</button>
                       </div>
                       <div class="btn-group operation">
-                      <button class="btn btn-sm btn-danger " id="delete_project_btn" type="button"
-                      onclick="window.location.href='/manage/delete_project/{{project.id}}'"/>删除</button>
+                      <button class="btn btn-sm btn-danger " id="delete_module_btn" type="button"
+                      onclick="window.location.href='/manage/delete_module/{{module.id}}'"/>删除</button>
                       </div>
                   </td>
                 </tr>
@@ -93,9 +95,9 @@
 
         {% if type == "add" %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h3 class="sub-header">添加项目</h3>
+            <h3 class="sub-header">添加模块</h3>
             <div class="table-responsive">
-                <form id="add_project_form" method="post" action="{% url 'add_project' %}" >
+                <form id="add_module_form" method="post" action="/manage/add_module/" >
                     {% csrf_token %}
                     {{ form.as_p }}
                     {{ msg }}
@@ -107,14 +109,14 @@
 
         {% if type == 'edit'%}
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h3 class="sub-header">编辑项目</h3>
+                <h3 class="sub-header">编辑模块</h3>
                 <div class="table-responsive">
                     <form role="form" method="post">
                         {% csrf_token %}
                         {{ form.as_p }}
                         {{ msg }}
                         <button class="btn btn-default" type="button"
-                                onclick="window.location.href='/manage/project_manage/'"
+                                onclick="window.location.href='/manage/module_manage/'"
                                 style="margin-right: 10px;">取消</button>
                         <button type="submit" class="btn btn-success">保存</button>
                     </form>

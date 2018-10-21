@@ -2,9 +2,11 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
-from ..models import Project, Module
+from ..models import Project
 from ..forms import AddProjectForm
+from collections import Iterable
 
 
 @login_required
@@ -24,7 +26,23 @@ class ProjectManage(View):
 	def get(self, request):
 		username = request.session.get("user1", "")
 		project_all = Project.objects.all()
-		return render(request, "project_manage.html", {"user": username, "projects": project_all, "type": "list"})
+		try:
+			page = int(request.GET.get('page', 1))
+			print(page)
+		except PageNotAnInteger:
+			page = 1
+		p = Paginator(project_all, 10, request=request)
+		print(type(p))
+		project = p.page(page)
+		pages = project.pages
+		print(isinstance(project, Iterable))
+		print(type(project))
+		return render(request, "project_manage.html", {
+			"user": username,
+			"projects": project,
+			"pages": pages,
+			"type": "list",
+		})
 
 
 @login_required
