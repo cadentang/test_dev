@@ -43,31 +43,43 @@
 
         {% if type == "list" %}
         <div class=" col-sm-8 col-sm-offset-1 col-md-10 col-md-offset-2 main">
-          <h2 class="sub-header">项目管理
-          <button type="button" class="btn btn-lg btn-primary" style="float: right;"
+          <h2 class="sub-header">项目管理</h2>
+            <div class="container-fluid" >
+                <div class="col-lg-6">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+          <button type="button" class="btn btn-primary" style="float: right;"
                 onclick="window.location.href='/manage/add_project/'">
                 新增</button>
-          </h2>
+            </div>
+
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>项目名称</th>
-                  <th>项目描述</th>
-                  <th>项目状态</th>
-                  <th>添加时间</th>
-                  <th>操作</th>
+                    <th>序号</th>
+                    <th>ID</th>
+                    <th>项目名称</th>
+                    <th>项目描述</th>
+                    <th>项目状态</th>
+                    <th>添加时间</th>
+                    <th>操作</th>
                 </tr>
               </thead>
               <tbody>
               {% for project in projects %}
-                <tr>
-                  <td>{{ project.id }}</td>
-                  <td>{{ project.name }}</td>
-                  <td>{{ project.describe }}</td>
-                  <td>{{ project.status }}</td>
-                  <td>{{ project.create_time }}</td>
+                <tr h-id="{{ project.nid }}" b-id="{{ project.business_id }}">
+                     <td>{{ forloop.counter|add:start }}</td>
+                      <td>{{ project.id }}</td>
+                      <td>{{ project.name }}</td>
+                      <td>{{ project.describe }}</td>
+                      <td>{{ project.get_status_display }}</td>
+                      <td>{{ project.create_time }}</td>
                   <td>
                       <div class="btn-group operation">
                       <button class="btn btn-sm btn-info " id="alter_project_btn" type="button"
@@ -89,29 +101,20 @@
             </table>
           </div>
 
-            <div class="pageturn">
-            <ul class="pagelist">
+            <!-- 列表分页器 -->
+            <div class="pagination" style="float: right;">
+              <span class="step-links">
                 {% if projects.has_previous %}
-                    <li class="long"><a href="?{{ projects.previous_page_number.querystring }}">上一页</a></li>
+                  <a href="?page={{ projects.previous_page_number }}">上一页</a>
                 {% endif %}
-
-                {% for page in pages %}
-                    {% if page %}
-                        {% ifequal page projects.number %}
-                            <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
-                        {% else %}
-                            <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
-                        {% endifequal %}
-                    {% else %}
-                        <li class="none"><a href="">...</a></li>
-                    {% endif %}
-                {% endfor %}
+                  <span class="current">
+                    Page {{ projects.number }} of {{ projects.paginator.num_pages }}
+                  </span>
                 {% if projects.has_next %}
-                    <li class="long"><a href="?{{ projects.next_page_number.querystring }}">下一页</a></li>
+                  <a href="?page={{ projects.next_page_number }}">下一页</a>
                 {% endif %}
-
-            </ul>
-        </div>
+              </span>
+            </div>
         </div>
         {% endif %}
 
@@ -141,6 +144,22 @@
                                 onclick="window.location.href='/manage/project_manage/'"
                                 style="margin-right: 10px;">取消</button>
                         <button type="submit" class="btn btn-success">保存</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if type == 'view'%}
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h3 class="sub-header">查看项目</h3>
+                <div class="table-responsive">
+                    <form role="form" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        {{ msg }}
+                        <button class="btn btn-default" type="button"
+                                onclick="window.location.href='/manage/project_manage/'"
+                                style="margin-right: 10px;">返回</button>
                     </form>
                 </div>
             </div>

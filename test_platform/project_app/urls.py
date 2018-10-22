@@ -14,6 +14,7 @@ urlpatterns = [
     path('edit_project/<int:pid>', project_views.EditProject.as_view(), name="edit_project"),
     # path('delete_project/<int:pid>', project_views.delete_project, name="delete_project")
     path('delete_project/<int:pid>', project_views.DeleteProject.as_view(), name="delete_project"),
+    path('view_project/<int:pid>', project_views.ViewProject.as_view(), name="view_project"),
 
     # 模块管理
     path('module_manage/', module_views.ModuleManage.as_view(), name="module_manage"),

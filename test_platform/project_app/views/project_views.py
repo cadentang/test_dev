@@ -2,11 +2,10 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from ..models import Project
 from ..forms import AddProjectForm
-from collections import Iterable
 
 
 @login_required
@@ -26,22 +25,20 @@ class ProjectManage(View):
 	def get(self, request):
 		username = request.session.get("user1", "")
 		project_all = Project.objects.all()
+		paginator = Paginator(project_all, 10)
+		page = request.GET.get('page', 1)
+		start = (int(page) - 1) *10
 		try:
-			page = int(request.GET.get('page', 1))
-			print(page)
+			projects = paginator.page(page)
 		except PageNotAnInteger:
-			page = 1
-		p = Paginator(project_all, 10, request=request)
-		print(type(p))
-		project = p.page(page)
-		pages = project.pages
-		print(isinstance(project, Iterable))
-		print(type(project))
+			projects = paginator.page(1)
+		except EmptyPage:
+			projects = paginator.page(paginator.num_pages)
 		return render(request, "project_manage.html", {
 			"user": username,
-			"projects": project,
-			"pages": pages,
+			"projects": projects,
 			"type": "list",
+			"start": start,
 		})
 
 
@@ -150,6 +147,20 @@ class EditProject(View):
 		})
 
 
+class ViewProject(View):
+	"""查看视图"""
+	def get(self, request, pid):
+		if pid:
+			project1 = Project.objects.get(id=pid)
+			project_form = AddProjectForm(instance=project1)
+		else:
+			project_form = AddProjectForm()
+		return render(request, 'project_manage.html', {
+			'form': project_form,
+			"type": "view",
+		})
+
+
 def delete_project(request, pid):
 	"""删除项目"""
 	Project.objects.get(id=pid).delete()
@@ -161,4 +172,5 @@ class DeleteProject(View):
 	def get(self, request, pid):
 		Project.objects.get(id=pid).delete()
 		return HttpResponseRedirect("/manage/project_manage/")
+
 
