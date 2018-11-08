@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'user_app',
     'project_app',
     'pure_pagination',
+    'interface_app',
 ]
 
 MIDDLEWARE= [

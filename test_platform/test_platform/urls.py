@@ -27,4 +27,5 @@ urlpatterns = [
     #path('project_manage/', views.project_manage),
 	path('logout_view/', views.logout_view),
 	path('manage/', include('project_app.urls')),#project_app应用url
+	path('interface/', include('interface_app.urls')),#interface_app应用url
 ]
