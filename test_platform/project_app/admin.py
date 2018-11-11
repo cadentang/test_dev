@@ -3,6 +3,7 @@ from .models import Project, Module
 
 # Register your models here.
 
+
 class ProjectAdmin(admin.ModelAdmin):
 	"项目管理model"
 	list_display = ["name", "describe", "status", "create_time", "id"]
