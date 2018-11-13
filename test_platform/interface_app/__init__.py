@@ -1,0 +1,1 @@
+default_app_config = 'interface_app.apps.InterfaceAppConfig'

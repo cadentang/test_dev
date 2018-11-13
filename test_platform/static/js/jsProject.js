@@ -8,7 +8,7 @@ var ProjectInit = function (_cmbProject, _cmbModule) {
 
     //创建下拉选项
     function cmbAddoption(cmb, str, obj) {
-        console.log(str)
+        //console.log(str)
         var option = document.createElement("option");
         cmb.options.add(option);
         option.innerHTML = str;
@@ -23,8 +23,8 @@ var ProjectInit = function (_cmbProject, _cmbModule) {
             return;
         }
         var item = cmbProject.options[cmbProject.selectedIndex].obj;
-        for (var i = 0; i< item.moduleList.length; i++){
-            cmbAddoption(cmbModule, item.moduleList[i], null);
+        for (var i = 0; i< item.modulelist.length; i++){
+            cmbAddoption(cmbModule, item.modulelist[i], null);
         }
     }
 
@@ -33,8 +33,8 @@ var ProjectInit = function (_cmbProject, _cmbModule) {
         $.get("/interface/get_project_list", {}, function (resp) {
             if (resp.success === "true"){
                 datalist = resp.data;
-                 for (var i = 0; i < dataList.length; i++) {
-                    cmbAddOption(cmbProject, dataList[i].name, dataList[i]);
+                 for (var i = 0; i < datalist.length; i++) {
+                    cmbAddoption(cmbProject, datalist[i].name, datalist[i]);
                 }
                 changeProject();
                  cmbProject.onchange = changeProject;

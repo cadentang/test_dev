@@ -4,10 +4,9 @@ from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from interface_app.models import TestCase
-from project_app.models import Project, Module
 from ..forms import TestCaseForm
-
+from ..models import TestCase
+from project_app.models import Project, Module
 
 class CaseManage(View):
 	"""
@@ -45,7 +44,7 @@ class CaseApiDebug(View):
 class SaveCase(View):
 	"""创建用例"""
 	def post(self, request):
-		module_name = request.POST.get("module")
+		module_name = request.POST.get("module_name")
 		name = request.POST.get("name", "")
 		response_url = request.POST.get("response_url", "")
 		response_method = request.POST.get("response_method", "")
@@ -54,9 +53,22 @@ class SaveCase(View):
 		response_parameter = request.POST.get("response_parameter", "")
 		response_assert = request.POST.get("response_assert", "")
 		status = request.POST.get("status", "")
+		print(module_name,name,response_url,response_method,response_type,response_header,response_parameter,response_assert,status)
 
-		if response_url==""or response_method==""or response_type==""or module_name=="" or status=="":
+		if response_url=="":
+			return HttpResponse("URL该字段不能为空")
+
+		if response_method=="":
+			return HttpResponse("请求方法该字段不能为空")
+
+		if response_type=="":
 			return HttpResponse("该字段不能为空")
+
+		if module_name=="":
+			return HttpResponse("module_name该字段不能为空")
+
+		if status=="":
+			return HttpResponse("status该字段不能为空")
 
 		if response_header == "":
 			response_header = "{}"
@@ -75,12 +87,13 @@ class SaveCase(View):
 
 # 获取项目模块列表
 class GetProjectList(View):
+
 	def get(self, request):
 		project_list = Project.objects.all()
 		datalist = []
 		for project in project_list:
 			project_dict = {
-				"name", project.name
+				"name": project.name
 			}
 			module_list = Module.objects.filter(project_id=project.id)
 			if len(module_list) != 0:
@@ -88,7 +101,7 @@ class GetProjectList(View):
 				for module in module_list:
 					module_name.append(module.name)
 					project_dict["modulelist"] = module_name
-					datalist = datalist.append(project_dict).json()
+					datalist.append(project_dict)
 		return JsonResponse({"success":"true", "data": datalist})
 
 
