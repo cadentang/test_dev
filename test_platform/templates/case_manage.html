@@ -45,16 +45,20 @@
         <div class=" col-sm-8 col-sm-offset-1 col-md-10 col-md-offset-2 main">
           <h2 class="sub-header">用例列表</h2>
             <div class="container-fluid" >
-                <div class="col-lg-6">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search for...">
-                  <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Go!</button>
-                  </span>
-                </div><!-- /input-group -->
-          </div><!-- /.col-lg-6 -->
-          <button type="button" class="btn btn-primary" style="float: right;"
-                onclick="window.location.href='/interface/debug/'">
+                <div class="col-lg-6" style="float: left">
+                    <div class="input-group" style="float: left">
+                        <form class="navbar-form" method="get" action="/interface/search_case_name/" style="float: left">
+                            <div style="float: left">
+                                <input name="case_name" type="text" class="form-control" placeholder="请输入" >
+                                <button class="btn btn-default" type="submit">搜索</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+                <button type="button" class="btn btn-primary" style="float: right;"
+                onclick="window.location.href='/interface/add_case/'">
                 新增</button>
             </div>
 
@@ -94,17 +98,14 @@
                       <td>{{ testcase.create_time }}</td>
                   <td>
                       <div class="btn-group operation">
-                      <button class="btn btn-sm btn-info " id="alter_project_btn" type="button"
-                                onclick="window.location.href='/manage/edit_project/{{project.id}}'"/>
-                                编辑</button>
+                      <button class="btn btn-sm btn-info " id="alter_case_btn" type="button"
+                                onclick="window.location.href='/interface/debug_case/{{testcase.id}}'"/>
+                                调试</button>
                       </div>
+
                       <div class="btn-group operation">
-                      <button class="btn btn-sm btn-success " id="project_btn" type="button"
-                      onclick="window.location.href='/manage/view_project/{{testcase.id}}'"/>查看</button>
-                      </div>
-                      <div class="btn-group operation">
-                      <button class="btn btn-sm btn-danger " id="delete_project_btn" type="button"
-                      onclick="window.location.href='/manage/delete_project/{{project.id}}'"/>删除</button>
+                      <button class="btn btn-sm btn-danger " id="delete_case_btn" type="button"
+                      onclick="window.location.href='/interface/delete_case/{{testcase.id}}'"/>删除</button>
                       </div>
                   </td>
                 </tr>
@@ -130,16 +131,27 @@
         </div>
         {% endif %}
 
-        {% if type == "debug" %}
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <div class="row">
-                {% block api_debug %}
-
-                {% endblock %}
+            <!--新增用例页面-->
+            {% if type == "add" %}
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div class="row">
+                    {% block add_case %}
+                        <!--add_case.html页面-->
+                    {% endblock %}
+                </div>
             </div>
+            {% endif %}
 
-        </div>
-        {% endif %}
+          <!--用例调试页面-->
+          {% if type == "debug" %}
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    <div class="row">
+                        {% block debug_case %}
+                        <!--debug_case.html页面-->
+                        {% endblock %}
+                    </div>
+                </div>
+          {% endif %}
 
       </div>
   </div>

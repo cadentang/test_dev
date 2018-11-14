@@ -18,14 +18,14 @@ class CaseManage(View):
 		return render(request, "case_manage.html", {"user": username, "modules": case_all, "type": "list"})
 
 
-class Debug(View):
-	"""创建、调试接口"""
+class AddCase(View):
+	"""创建用例"""
 	def get(self, request):
-		return render(request, "api_debug.html", {"type": "debug"})
+		return render(request, "add_case.html", {"type": "add"})
 
 
-class CaseApiDebug(View):
-	"""用例调试"""
+class DebugCase(View):
+	"""调试用例"""
 	def post(self, request):
 		url = request.POST.get("response_url")
 		method = request.POST.get("response_method")
@@ -53,8 +53,6 @@ class SaveCase(View):
 		response_parameter = request.POST.get("response_parameter", "")
 		response_assert = request.POST.get("response_assert", "")
 		status = request.POST.get("status", "")
-		print(module_name,name,response_url,response_method,response_type,response_header,response_parameter,response_assert,status)
-
 		if response_url=="":
 			return HttpResponse("URL该字段不能为空")
 
@@ -127,10 +125,50 @@ class CaseManage(View):
 			"start": start,
 		})
 
+class SearchCaseName(View):
+
+	def get(self, request):
+		case_name = request.GET.get("case_name", "")
+		cases = TestCase.objects.filter(name__contains=case_name)
+		paginator = Paginator(cases, 10)
+		page = request.GET.get("page", 1)
+		start = (int(page) - 1) * 10
+		try:
+			contacts = paginator.page(page)
+		except PageNotAnInteger:
+			# 如果页数不是整型, 取第一页.
+			contacts = paginator.page(1)
+		except EmptyPage:
+			# 如果页数超出查询范围，取最后一页
+			contacts = paginator.page(paginator.num_pages)
+		return render(request, "case_manage.html", {
+			"type": "list",
+			"testcases": contacts,
+			"case_name": case_name,
+		})
 
 
-
-
+class GetCase(View):
+	"""获取单个用例信息"""
+	def post(self, request):
+		case_id = request.POST.get("caseId", "")
+		if case_id == "":
+			return JsonResponse({"success": "false","message": "case id is null!"})
+		case = TestCase.objects.get(pk=case_id)
+		module = Module.objects.get(name=case.name)
+		case_info = {
+			"project_name": module.project,
+			"module_name": case.module,
+			"name": case.name,
+			"response_url": case.response_url,
+			"response_method": case.response_method,
+			"response_type": case.response_type,
+			"response_header": case.response_header,
+			"response_parameter": case.response_parameter,
+			"response_assert": case.response_assert,
+			"status": case.status,
+		}
+		return JsonResponse({"success": "true", "message": "ok", "data": case_info})
 
 
 

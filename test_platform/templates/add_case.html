@@ -1,0 +1,189 @@
+{% extends "case_manage.html" %}
+{% block add_case %}
+
+    <fieldset>
+        <div id="legend" class="">
+            <legend class="">在线接口调试</legend>
+        </div>
+
+        <div style="width:80%; margin-left: 20px;">
+        <form action="/debug/" method="get" class="bs-example bs-example-form" role="form" style="margin-top: 30px">
+            <div class="form-group" style="height: 20px;">
+                <label>项目：</label>
+                <select id="project_name"></select>
+            </div>
+
+            <div class="form-group">
+                <label>模块：</label>
+                <select id="module_name"></select>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon">名称</span>
+                <input id="response_name" type="text" class="form-control" placeholder="name">
+            </div>
+            <br>
+
+            <div class="input-group">
+                <span class="input-group-addon">URL</span>
+                <input id="response_url" type="text" class="form-control" placeholder="url">
+            </div>
+            <br>
+            <div>
+                <label>请求方法：</label>
+                <label class="radio-inline">
+                    <input type="radio" name="response_method" id="get" value="get" checked> GET
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="response_method" id="post" value="post"> POST
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="response_method" id="pub" value="put"> PUT
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="response_method" id="delete" value="delete"> DELETE
+                </label>
+            </div>
+
+            <div style="margin-top: 10px;">
+                <label>参数类型：</label>
+                <label class="radio-inline">
+                    <input type="radio" name="response_type" id="from" value="form-data" checked> form-data
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="response_type" id="json" value="json"> JSON
+                </label>
+            </div>
+
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon">Header</span>
+                <input id="response_header" type="text" class="form-control">
+            </div>
+            <p style="color:#8B8989">说明：以字典的方式设置参数，如：{"content-type": "application/json"}</p>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon">参数</span>
+                <input id="response_parameter" type="text" class="form-control">
+            </div>
+            <p style="color:#8B8989">说明：以字典的方式设置参数，如：{"id":1, "name":"名称"}</p>
+
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon">断言</span>
+                <input id="response_assert" type="text" class="form-control">
+            </div>
+            <p style="color:#8B8989">说明：以字典的方式设置参数，如：{"id":1, "name":"名称"}</p>
+
+            <br>
+            <div style="margin-top: 10px;">
+                <label>是否启用：</label>
+                <label class="radio-inline">
+                    <input type="radio" name="response_status" id="1" value="1" checked> 启用
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="response_status" id="0" value="0"> 关闭
+                </label>
+            </div>
+            <div style="width: 100%; height: 60px;">
+                <button type="button" class="btn btn-success" id="send" style="float: right;margin-right: 10px;">调试</button>
+                <button type="button" class="btn btn-success" id="save" style="float: right;margin-right: 10px;">保存</button>
+                <button type="button" class="btn btn-success" id="back" style="float: right;margin-right: 10px;"
+                        onclick="window.location.href='/interface/case_manage/'">返回</button>
+            </div>
+        </form>
+        </div>
+
+        <div style="width:80%; margin-left: 20px;">
+            <p>返回结果：</p>
+            <textarea id="result" class="form-control" rows="10" name=textarea></textarea>
+        </div>
+
+    </fieldset>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    //初始化菜单
+    ProjectInit('project_name', 'module_name');
+    $(document).ready(function () {
+        $("#send").click(function () {
+            let url = $("#response_url").val();
+            let method = $('input[name="response_method"]:checked').val();
+            let parameter = $("#response_parameter").val();
+            let headers = $("#response_header").val();
+            console.log(url, method, parameter, headers)
+            //window.alert("hello")
+            if(url === ""){
+                window.alert("请求url不能为空，请重新填写！");
+            }else if (method === ""){
+                window.alert("请求的方法不能为空，请重新填写！");
+            }else if(parameter === ""){
+                parameter = "{}";
+            }else if(headers === ""){
+                headers = "{}"
+            }
+
+            //发送post请求
+            $.post("/interface/api_debug/",{
+                "response_url": url,
+                "response_method": method,
+                "response_parameter": parameter,
+                "response_header": headers,
+            },function (resp){
+                $("#result").val(resp)
+                 //$("#result").html(resp);
+                });
+        });
+
+        $("#save").click(function () {
+            let name = $("#response_name").val();
+            let response_url = $("#response_url").val();
+            let response_method = $('input[name="response_method"]:checked').val();
+            let response_type = $('input[name="response_type"]:checked').val();
+            let response_header = $("#response_header").val();
+            let response_parameter = $("#response_parameter").val();
+            let module_name = $('select[id="module_name"]').val();
+            let status =  $('input[name="response_status"]:checked').val();
+
+            console.log("用例名称", name);
+            console.log("参数类型", response_type);
+            console.log("头部", response_header);
+            console.log("模块", module_name);
+            console.log("请求方法", response_method);
+            console.log("请求URL", response_url);
+            console.log("请求参数", response_parameter);
+            console.log("用例状态", status);
+            if(name === ""){
+                window.alert("用例名称不能为空！")
+            }else if(response_url === ""){
+                window.alert("用例url名称不能为空！")
+            }else if(module_name === ""){
+                window.alert("模块名称不能为空！")
+            }else if(response_header === ""){
+                response_header = "{}"
+            }else if(response_parameter === ""){
+                response_parameter = "{}"
+            }
+
+            //发送post请求保存用例
+            $.post("/interface/save_case/",{
+                "module_name": module_name,
+                "name": name,
+                "response_url": response_url,
+                "response_method": response_method,
+                "response_type": response_type,
+                "response_header": response_header,
+                "response_parameter": response_parameter,
+                "status": status,
+            },function (resp) {
+                $("#result").html(resp);
+            })
+        })
+    });
+
+</script>
+
+
+
+{% endblock %}
