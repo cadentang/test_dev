@@ -12,7 +12,7 @@ var ProjectInit = function (_cmbProject, _cmbModule) {
         var option = document.createElement("option");
         cmb.options.add(option);
         option.innerHTML = str;
-        option.value =str;
+        option.value = str;
         option.obj = obj;
     }
 

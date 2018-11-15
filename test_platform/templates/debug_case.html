@@ -106,6 +106,15 @@
 <script type="text/javascript">
     //初始化菜单
     ProjectInit('project_name', 'module_name');
+
+    let url_path = document.location.pathname;
+    let case_id = url_path.split("/")[3];
+    console.log(url_path);
+    console.log(case_id);
+
+    //调用获取用例信息的方法
+    CaseInit(case_id);
+
     $(document).ready(function () {
         $("#send").click(function () {
             let url = $("#response_url").val();

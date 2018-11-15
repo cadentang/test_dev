@@ -42,7 +42,7 @@ class DebugCase(View):
 
 
 class SaveCase(View):
-	"""创建用例"""
+	"""保存用例"""
 	def post(self, request):
 		module_name = request.POST.get("module_name")
 		name = request.POST.get("name", "")
@@ -151,11 +151,13 @@ class SearchCaseName(View):
 class GetCase(View):
 	"""获取单个用例信息"""
 	def post(self, request):
-		case_id = request.POST.get("caseId", "")
+		case_id = request.POST.get("case_id", "")
 		if case_id == "":
 			return JsonResponse({"success": "false","message": "case id is null!"})
 		case = TestCase.objects.get(pk=case_id)
+		print(case)
 		module = Module.objects.get(name=case.name)
+		print(module)
 		case_info = {
 			"project_name": module.project,
 			"module_name": case.module,
@@ -166,10 +168,19 @@ class GetCase(View):
 			"response_header": case.response_header,
 			"response_parameter": case.response_parameter,
 			"response_assert": case.response_assert,
-			"status": case.status,
+			"response_status": case.status,
 		}
 		return JsonResponse({"success": "true", "message": "ok", "data": case_info})
 
+
+class EditCase(View):
+	"""编辑用例"""
+	def get(self, request, case_id):
+		form = TestCaseForm()
+		return render(request, "debug_case.html", {
+			"form": form,
+			"type": "debug"
+		})
 
 
 
