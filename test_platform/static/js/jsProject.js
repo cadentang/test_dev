@@ -1,10 +1,20 @@
 /**
  * Created by caden on 2018/11/10.
  */
-var ProjectInit = function (_cmbProject, _cmbModule) {
+var ProjectInit = function (_cmbProject, _cmbModule, defaultProject, defaultMudle) {
     var cmbProject = document.getElementById(_cmbProject);
     var cmbModule = document.getElementById(_cmbModule);
     var datalist = [];
+
+    //用例调试页面设置默认项
+    function cmbSelect(cmb, str) {
+        for (var i=0; i<cmb.options.length; i++){
+            if (cmb.options[i].value == str){
+                cmb.selectedIndex = i;
+                return;
+            }
+        }
+    }
 
     //创建下拉选项
     function cmbAddoption(cmb, str, obj) {
@@ -26,6 +36,7 @@ var ProjectInit = function (_cmbProject, _cmbModule) {
         for (var i = 0; i< item.modulelist.length; i++){
             cmbAddoption(cmbModule, item.modulelist[i], null);
         }
+        cmbSelect(cmbModule, defaultMudle);
     }
 
     //调用项目列表接口
@@ -36,12 +47,12 @@ var ProjectInit = function (_cmbProject, _cmbModule) {
                  for (var i = 0; i < datalist.length; i++) {
                     cmbAddoption(cmbProject, datalist[i].name, datalist[i]);
                 }
+                cmbSelect(cmbProject, defaultProject);
                 changeProject();
-                 cmbProject.onchange = changeProject;
+                cmbProject.onchange = changeProject;
             }
+            cmbSelect(cmbProject, defaultProject);
         });
     }
-
     getProjectlist();
-
 }

@@ -69,10 +69,16 @@
             <p style="color:#8B8989">说明：以字典的方式设置参数，如：{"id":1, "name":"名称"}</p>
 
             <br>
-            <div class="input-group">
-                <span class="input-group-addon">断言</span>
-                <input id="response_assert" type="text" class="form-control">
+             <p>断言：</p>
+            <div style="height: 100px">
+                <div style="float: left;width: 90%;">
+                    <textarea id="response_assert" class="form-control" rows="5" name=textarea></textarea>
+                </div>
+                <div style="margin-top: 40px;float: right;">
+                    <button type="button" class="btn btn-default" id="assert" style="float: right;margin-right: 10px;">验证</button>
+                </div>
             </div>
+            <br>
             <p style="color:#8B8989">说明：以字典的方式设置参数，如：{"id":1, "name":"名称"}</p>
 
             <br>
@@ -85,6 +91,7 @@
                     <input type="radio" name="response_status" id="0" value="0"> 关闭
                 </label>
             </div>
+
             <div style="width: 100%; height: 60px;">
                 <button type="button" class="btn btn-success" id="send" style="float: right;margin-right: 10px;">调试</button>
                 <button type="button" class="btn btn-success" id="save" style="float: right;margin-right: 10px;">保存</button>
@@ -105,12 +112,10 @@
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     //初始化菜单
-    ProjectInit('project_name', 'module_name');
-
     let url_path = document.location.pathname;
     let case_id = url_path.split("/")[3];
-    console.log(url_path);
-    console.log(case_id);
+    //console.log(url_path);
+    //console.log(case_id);
 
     //调用获取用例信息的方法
     CaseInit(case_id);
@@ -121,8 +126,7 @@
             let method = $('input[name="response_method"]:checked').val();
             let parameter = $("#response_parameter").val();
             let headers = $("#response_header").val();
-            console.log(url, method, parameter, headers)
-            //window.alert("hello")
+            //console.log(url, method, parameter, headers)
             if(url === ""){
                 window.alert("请求url不能为空，请重新填写！");
             }else if (method === ""){
@@ -154,29 +158,33 @@
             let response_parameter = $("#response_parameter").val();
             let module_name = $('select[id="module_name"]').val();
             let status =  $('input[name="response_status"]:checked').val();
+            let response_assert = $("#response_assert").val();
 
-            console.log("用例名称", name);
-            console.log("参数类型", response_type);
-            console.log("头部", response_header);
-            console.log("模块", module_name);
-            console.log("请求方法", response_method);
-            console.log("请求URL", response_url);
-            console.log("请求参数", response_parameter);
-            console.log("用例状态", status);
+            //console.log("用例名称", name);
+            //console.log("参数类型", response_type);
+            //console.log("头部", response_header);
+            //console.log("模块", module_name);
+            //console.log("请求方法", response_method);
+            //console.log("请求URL", response_url);
+            //console.log("请求参数", response_parameter);
+            //console.log("用例状态", status);
+            console.log("断言", response_assert);
             if(name === ""){
                 window.alert("用例名称不能为空！")
             }else if(response_url === ""){
                 window.alert("用例url名称不能为空！")
             }else if(module_name === ""){
                 window.alert("模块名称不能为空！")
-            }else if(response_header === ""){
+            }else if(response_assert === ""){
+                window.alert("断言信息不能为空！")
+            } else if(response_header === ""){
                 response_header = "{}"
             }else if(response_parameter === ""){
                 response_parameter = "{}"
             }
 
             //发送post请求保存用例
-            $.post("/interface/save_case/",{
+            $.post("/interface/edit_save_case/",{
                 "module_name": module_name,
                 "name": name,
                 "response_url": response_url,
@@ -184,11 +192,34 @@
                 "response_type": response_type,
                 "response_header": response_header,
                 "response_parameter": response_parameter,
+                "response_assert": response_assert,
                 "status": status,
+                "case_id": case_id,
             },function (resp) {
                 $("#result").html(resp);
             })
-        })
+        });
+
+        //将响应结果和断言信息发给后端处理
+        $("#assert").click(function () {
+            let response_result = $("#result").val();
+            let assert_message = $("#response_assert").val();
+
+            console.log("响应结果：", response_result);
+            console.log("断言信息：", assert_message);
+            if (response_result === ""|| assert_message === ""){
+                window.alert("验证的数据不能为空!");
+            }else {
+                window.alert("发送请求中...");
+            }
+
+            $.post("/interface/api_assert/",{
+                "response_result": response_result,
+                "assert_message": assert_message,
+            },function (resp) {
+                window.alert(resp.message);
+            });
+        });
     });
 
 </script>

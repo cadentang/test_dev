@@ -112,7 +112,6 @@
             let method = $('input[name="response_method"]:checked').val();
             let parameter = $("#response_parameter").val();
             let headers = $("#response_header").val();
-            console.log(url, method, parameter, headers)
             //window.alert("hello")
             if(url === ""){
                 window.alert("请求url不能为空，请重新填写！");
@@ -146,14 +145,6 @@
             let module_name = $('select[id="module_name"]').val();
             let status =  $('input[name="response_status"]:checked').val();
 
-            console.log("用例名称", name);
-            console.log("参数类型", response_type);
-            console.log("头部", response_header);
-            console.log("模块", module_name);
-            console.log("请求方法", response_method);
-            console.log("请求URL", response_url);
-            console.log("请求参数", response_parameter);
-            console.log("用例状态", status);
             if(name === ""){
                 window.alert("用例名称不能为空！")
             }else if(response_url === ""){
@@ -180,6 +171,7 @@
                 $("#result").html(resp);
             })
         })
+
     });
 
 </script>

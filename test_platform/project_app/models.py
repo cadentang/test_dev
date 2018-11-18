@@ -17,7 +17,8 @@ class Project(models.Model):
 		verbose_name_plural = verbose_name
 
 	def __str__(self):
-		return self.get_status_display()
+		return self.name
+		#return self.get_status_display()
 
 
 class Module(models.Model):

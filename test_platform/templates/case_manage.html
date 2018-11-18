@@ -28,7 +28,7 @@
 
   <div class="container-fluid">
       <div class="row">
-        <div  class=" col-sm-3 col-md-2 sidebar">
+        <div  class=" col-sm-1 col-md-1 sidebar">
           <ul class="nav nav-sidebar">
             <li><a href="/manage/project_manage/">项目管理</a></li>
             <li><a href="/manage/module_manage/">模块管理</a></li>
@@ -42,7 +42,13 @@
         </div>
 
         {% if type == "list" %}
-        <div class=" col-sm-8 col-sm-offset-1 col-md-10 col-md-offset-2 main">
+        <div class=" col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 main" style=" padding-right: 1px;
+            margin-right: 1px;
+            border-right-width: 1px;
+            right: 0px;
+            margin-left: 120px;
+            width: 1191px;"
+        >
           <h2 class="sub-header">用例列表</h2>
             <div class="container-fluid" >
                 <div class="col-lg-6" style="float: left">
@@ -67,8 +73,8 @@
               <thead>
                 <tr>
                     <th>序号</th>
-                    <th>ID</th>
-                    <th>模块名称</th>
+                    <th>项目</th>
+                    <th>模块</th>
                     <th>用例名称</th>
                     <th>用例URL</th>
                     <th>请求方法</th>
@@ -85,8 +91,16 @@
               {% for testcase in testcases %}
                 <tr h-id="{{ testcase.nid }}" b-id="{{ testcase.business_id }}">
                      <td>{{ forloop.counter|add:start }}</td>
-                      <td>{{ testcase.id }}</td>
-                      <td>{{ testcase.module_name }}</td>
+                        {% for module in modules %}
+                            {% if module.id == testcase.module_id %}
+                                {% for project in projects %}
+                                    {% if project.id == module.project_id %}
+                                        <td>{{ project.name }}</td>
+                                         <td>{{ module.name }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
                       <td>{{ testcase.name }}</td>
                       <td>{{ testcase.response_url }}</td>
                       <td>{{ testcase.response_method }}</td>

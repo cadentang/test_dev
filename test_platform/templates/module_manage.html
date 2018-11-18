@@ -28,7 +28,7 @@
 
   <div class="container-fluid">
       <div class="row">
-        <div  class=" col-sm-3 col-md-2 sidebar">
+        <div  class=" col-sm-1 col-md-1 sidebar">
           <ul class="nav nav-sidebar">
             <li ><a href="/manage/project_manage/">项目管理</a></li>
             <li class="active"><a href="#">模块管理</a></li>
@@ -42,7 +42,12 @@
         </div>
 
         {% if type == "list" %}
-        <div class=" col-sm-8 col-sm-offset-1 col-md-10 col-md-offset-2 main">
+        <div class=" col-sm-8 col-sm-offset-1 col-md-10 col-md-offset-2 main" style=" padding-right: 1px;
+            margin-right: 1px;
+            border-right-width: 1px;
+            right: 0px;
+            margin-left: 120px;
+            width: 1191px;">
           <h2 class="sub-header">模块管理
           <button type="button" class="btn btn-lg btn-primary" style="float: right;"
                 onclick="window.location.href='/manage/add_module/'">

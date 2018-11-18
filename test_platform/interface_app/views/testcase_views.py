@@ -55,25 +55,18 @@ class SaveCase(View):
 		status = request.POST.get("status", "")
 		if response_url=="":
 			return HttpResponse("URL该字段不能为空")
-
 		if response_method=="":
 			return HttpResponse("请求方法该字段不能为空")
-
 		if response_type=="":
 			return HttpResponse("该字段不能为空")
-
 		if module_name=="":
 			return HttpResponse("module_name该字段不能为空")
-
 		if status=="":
 			return HttpResponse("status该字段不能为空")
-
 		if response_header == "":
 			response_header = "{}"
-
 		if response_parameter == "":
 			response_parameter = "{}"
-
 		module_obj = Module.objects.get(name=module_name)
 		case = TestCase.objects.create(name=name,module=module_obj, response_url=response_url,
 		                               response_method=response_method, response_type=response_type,
@@ -83,9 +76,8 @@ class SaveCase(View):
 			return HttpResponse("保存成功!")
 
 
-# 获取项目模块列表
 class GetProjectList(View):
-
+	"""获取项目模块列表"""
 	def get(self, request):
 		project_list = Project.objects.all()
 		datalist = []
@@ -103,10 +95,12 @@ class GetProjectList(View):
 		return JsonResponse({"success":"true", "data": datalist})
 
 
-# 获取用例列表
 class CaseManage(View):
+	"""获取用例列表"""
 	def get(self, request):
 		testcases = TestCase.objects.all()
+		modules = Module.objects.all()
+		projects = Project.objects.all()
 		paginator = Paginator(testcases, 10)
 		page = request.GET.get("page", 1)
 		start = (int(page) - 1) *10
@@ -121,12 +115,15 @@ class CaseManage(View):
 		return render(request, "case_manage.html", {
 			#"user": username,
 			"testcases": contacts,
+			"modules":modules,
+			"projects":projects,
 			"type": "list",
 			"start": start,
 		})
 
-class SearchCaseName(View):
 
+class SearchCaseName(View):
+	"""测试用例搜索"""
 	def get(self, request):
 		case_name = request.GET.get("case_name", "")
 		cases = TestCase.objects.filter(name__contains=case_name)
@@ -155,12 +152,13 @@ class GetCase(View):
 		if case_id == "":
 			return JsonResponse({"success": "false","message": "case id is null!"})
 		case = TestCase.objects.get(pk=case_id)
-		print(case)
-		module = Module.objects.get(name=case.name)
-		print(module)
+		module_obj = Module.objects.get(pk=case.module_id)
+		module_name = module_obj.name
+		project_obj = Project.objects.get(pk=module_obj.project_id)
+		project_name = project_obj.name
 		case_info = {
-			"project_name": module.project,
-			"module_name": case.module,
+			"project_name": project_name,
+			"module_name": module_name,
 			"name": case.name,
 			"response_url": case.response_url,
 			"response_method": case.response_method,
@@ -174,7 +172,7 @@ class GetCase(View):
 
 
 class EditCase(View):
-	"""编辑用例"""
+	"""进入用例调试页面"""
 	def get(self, request, case_id):
 		form = TestCaseForm()
 		return render(request, "debug_case.html", {
@@ -182,6 +180,51 @@ class EditCase(View):
 			"type": "debug"
 		})
 
+
+class ApiAssert(View):
+	"""验证测试用例结果"""
+	def post(self, request):
+		assert_message = request.POST.get("assert_message", "")
+		response_result = request.POST.get("response_result", "")
+		if assert_message == "" or response_result == "":
+			return JsonResponse({"success": "false", "message": "断言或者响应结果不能为空！"})
+		try:
+			assert assert_message in response_result
+		except AssertionError:
+			return JsonResponse({"success": "false", "message": "断言失败！"})
+		else:
+			return JsonResponse({"success": "True", "message": "断言成功！"})
+
+
+class EditSaveCase(View):
+	"""用例调试页面保存用例"""
+	def post(self, request):
+		case_id = request.POST.get("case_id", "")
+		if case_id == "":
+			return JsonResponse({"success": "false","message": "case id is null!"})
+		test_case_form = TestCaseForm(request.POST)
+		if test_case_form.is_valid():
+			data = TestCase.objects.get(id=case_id)
+			data.module = test_case_form.cleaned_data["module_name"]
+			data.name = test_case_form.cleaned_data["name"]
+			data.response_url = test_case_form.cleaned_data["response_url"]
+			data.response_method = test_case_form.cleaned_data["response_method"]
+			data.response_type = test_case_form.cleaned_data["response_type"]
+			data.response_header = test_case_form.cleaned_data["response_header"]
+			data.response_parameter = test_case_form.cleaned_data["response_parameter"]
+			data.response_assert = test_case_form.cleaned_data["response_assert"]
+			data.status = test_case_form.cleaned_data["status"]
+			data.save()
+			return HttpResponse("保存成功!")
+		else:
+			return HttpResponse("保存失败！")
+
+
+class DeleteCase(View):
+	"""删除用例"""
+	def get(self, request, case_id):
+		TestCase.objects.get(pk=case_id).delete()
+		return HttpResponseRedirect("/interface/case_manage/")
 
 
 
