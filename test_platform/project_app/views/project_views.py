@@ -3,6 +3,7 @@ from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 from ..models import Project
 from ..forms import AddProjectForm
@@ -161,16 +162,32 @@ class ViewProject(View):
 		})
 
 
-def delete_project(request, pid):
-	"""删除项目"""
-	Project.objects.get(id=pid).delete()
-	return HttpResponseRedirect("/manage/project_manage/")
-
-
 class DeleteProject(View):
 	"""删除项目"""
 	def get(self, request, pid):
 		Project.objects.get(id=pid).delete()
 		return HttpResponseRedirect("/manage/project_manage/")
 
+
+class SearchProjectName(View):
+	"""搜索项目，维度：项目名称、项目状态"""
+	def get(self, request):
+		project_name = request.GET.get("project_name", "")
+		status = request.GET.get("status", "")
+		project_all = Project.objects.filter(name__contains=project_name)
+		paginator = Paginator(project_all, 10)
+		page = request.GET.get('page', 1)
+		start = (int(page) - 1) *10
+		try:
+			projects = paginator.page(page)
+		except PageNotAnInteger:
+			projects = paginator.page(1)
+		except EmptyPage:
+			projects = paginator.page(paginator.num_pages)
+		return render(request, "project_manage.html", {
+			"user": username,
+			"projects": projects,
+			"type": "list",
+			"start": start,
+		})
 

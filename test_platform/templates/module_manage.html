@@ -47,12 +47,23 @@
             border-right-width: 1px;
             right: 0px;
             margin-left: 120px;
-            width: 1191px;">
-          <h2 class="sub-header">模块管理
-          <button type="button" class="btn btn-lg btn-primary" style="float: right;"
-                onclick="window.location.href='/manage/add_module/'">
-                新增</button>
-          </h2>
+            width: 1691px;">
+          <h2 class="sub-header">模块管理</h2>
+          <div class="container-fluid" >
+                <div class="col-lg-6" style="float: left">
+                    <div class="input-group" style="float: left">
+                        <form class="navbar-form" method="get" action="/manage/search_module_name/">
+                            <div class="form-group">
+                                <input name="module_name" type="text" placeholder="模块名称" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-success">搜索</button>
+                        </form>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" style="float: right;"
+                onclick="window.location.href='/manage/add_module/'">新增</button>
+          </div>
+
           <div class="table-responsive">
             <table class="table table-condensed table-bordered table-striped table-hover">
               <thead>
@@ -108,6 +119,8 @@
                     {{ msg }}
                     <button type="submit" class="btn btn-success">创建</button>
                 </form>
+                <button class="btn btn-default" type="button" onclick="window.location.href='/manage/module_manage/'"
+                        style="margin-right: 10px;">返回</button>
             </div>
         </div>
         {% endif %}

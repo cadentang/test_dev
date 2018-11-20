@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 
-from ..models import Module
+from ..models import Module, Project
 from ..forms import ModuleForm
 
 
@@ -80,3 +81,29 @@ class ViewModule(View):
 	"""查看模块"""
 	def get(self, request, mid):
 		pass
+
+
+class SearchModuleName(View):
+	"""搜索模块，维度：项目名称、模块名称、模块状态"""
+	def get(self, request):
+		module_name = request.GET.get("module_name", "")
+		project_name = request.GET.get("project_name", "")
+		status = request.GET.get("status", "")
+		project_all = Project.objects.filter(name__contains=project_name)
+
+		module_all = Module.objects.filter(name__contains=module_name)
+
+		paginator = Paginator(module_all, 10)
+		page = request.GET.get('page', 1)
+		start = (int(page) - 1) *10
+		try:
+			modules = paginator.page(page)
+		except PageNotAnInteger:
+			modules = paginator.page(1)
+		except EmptyPage:
+			modules = paginator.page(paginator.num_pages)
+		return render(request, "module_manage.html", {
+			"modules": modules,
+			"type": "list",
+			"start": start,
+		})
