@@ -41,7 +41,18 @@ INSTALLED_APPS = [
     'project_app',
     'pure_pagination',
     'interface_app',
+    'rest_framework',
+    'rest_framework_swagger',
 ]
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 MIDDLEWARE= [
     'django.middleware.security.SecurityMiddleware',
