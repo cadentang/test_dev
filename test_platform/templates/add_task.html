@@ -1,0 +1,81 @@
+{% extends "task_manage.html" %}
+{% block add_task %}
+
+    <fieldset>
+        <div id="legend" class="">
+            <legend class="">添加任务</legend>
+        </div>
+
+        <div style="width:80%; margin-left: 20px;">
+        <form action="/debug/" method="get" class="bs-example bs-example-form" role="form" style="margin-top: 30px">
+            <div class="form-group" style="height: 20px;">
+                <label>任务名称：</label>
+                <input type="text" id="task_name"  class="form-control">
+            </div>
+            <br><br>
+
+            <div class="form-group">
+                <label>任务描述：</label>
+                <input type="text" id="task_describe"  class="form-control">
+            </div>
+
+            <div class="form-group">
+				<label>选择用例：</label>
+                <div class="caseList" style="overflow-y:scroll; height: 200px; background: #FFFFFF; padding-left: 15px;">
+				</div>
+			</div>
+
+            <div style="width: 100%; height: 60px;">
+                <button type="button" class="btn btn-success" id="running" style="float: right;margin-right: 10px;">执行</button>
+                <button type="button" class="btn btn-success" id="saveTask" style="float: right;margin-right: 10px;">保存</button>
+                <button type="button" class="btn btn-success" id="back" style="float: right;margin-right: 10px;"
+                        onclick="window.location.href='/interface/task_manage/'">返回</button>
+            </div>
+        </form>
+        </div>
+    </fieldset>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+	// 初始化用例的列表
+	CaseListInit()
+		// 保存任务
+		$("#saveTask").click(function () {
+			let task_name = $("#task_name").val();
+			let task_describe = $("#task_describe").val();
+			let task_creator = $("#user_name").text();
+			console.log("111",task_name);
+			console.log("222",task_describe);
+			console.log("333",task_creator);
+			if (task_name === "") {
+				window.alert("任务的名称不能为空！");
+			}
+			let selectCases = document.querySelectorAll("div.caseList > input");
+			//var selectCasesId = new Array()
+			var selectCasesId = "";
+			for (let i = 0; i < selectCases.length; i++) {
+				//window.alert("1111");
+				if (selectCases[i].checked === true){
+					let case_id = selectCases[i].value;
+					//selectCasesId.push(case_id);
+					selectCasesId = selectCasesId + case_id + ","
+				}
+			}
+			console.log("选中的用例id", selectCasesId);
+			$.post("/interface/save_task_data/", {
+				"task_name": task_name,
+				"task_describe": task_describe,
+				"task_cases": selectCasesId,
+                "task_creator": task_creator,
+			}, function (resp) {
+				if (resp.success === "true"){
+					window.alert(resp.message);
+				}else{
+					window.alert(resp.message);
+				}
+			});
+		});
+</script>
+
+
+{% endblock %}

@@ -1,7 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
 class Project(models.Model):
 	status_choice = (
 		(True, '开启'),

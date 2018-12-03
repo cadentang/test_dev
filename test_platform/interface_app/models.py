@@ -1,9 +1,19 @@
 from django.db import models
 from project_app.models import Module
+from user_app.models import UserInfo
 
+task_status_choice = (
+	('y0', '未执行'),
+	('y1', '执行中'),
+	('y2', '排队中'),
+	('y3', '执行完成'),
+	('y4', '故障中'),
+)
 
-# Create your models here.
 class TestCase(models.Model):
+	"""
+	测试用例
+	"""
 	status_choice = (
 		(True, '开启'),
 		(False, '关闭'),
@@ -24,4 +34,40 @@ class TestCase(models.Model):
 		verbose_name_plural = verbose_name
 
 	def __str__(self):
-		return self.get_status_display()
+		#return self.get_status_display()
+		return self.name
+
+
+class TestTask(models.Model):
+	"""
+	测试任务
+	"""
+	name = models.CharField(verbose_name="任务名称", max_length=100, blank=False)
+	describe = models.TextField(verbose_name="任务描述", max_length=100, default="")
+	status = models.CharField(verbose_name="任务状态", default="y0", max_length=10, choices=task_status_choice)
+	creator = models.ForeignKey(UserInfo, on_delete=models.CASCADE, default="", verbose_name="任务创建者" )
+	create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
+	case_id = models.ManyToManyField(TestCase)
+
+	class Meta:
+		verbose_name = "任务管理表"
+		verbose_name_plural = verbose_name
+
+	def __str__(self):
+		return self.name
+
+
+class TestTaskRecord(models.Model):
+	"""
+	测试任务执行记录
+	"""
+	testtask_id = models.ForeignKey(TestTask, on_delete=models.CASCADE, verbose_name="测试任务id")
+	operator = models.ForeignKey(UserInfo, on_delete=models.CASCADE, verbose_name="任务执行者" )
+	result =  models.BooleanField(verbose_name="任务执行结果")  # True:成功，False: 失败
+	work_start_time = models.DateTimeField(verbose_name="任务开始时间")
+	work_end_time = models.DateTimeField(verbose_name="任务结束时间")
+	create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
+
+	class Meta:
+		verbose_name = "任务执行记录表"
+		verbose_name_plural = verbose_name

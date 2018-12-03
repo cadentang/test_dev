@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import testcase_views
+from .views import testcase_views, testtask_views, testtask_api
 
 urlpatterns = [
     # 用例管理URL路径
@@ -14,4 +14,10 @@ urlpatterns = [
     path('get_case_info/', testcase_views.GetCase.as_view(), name="get_case_info"),
     path('api_assert/', testcase_views.ApiAssert.as_view(), name="api_assert"),
     path('delete_case/<int:case_id>/', testcase_views.DeleteCase.as_view(), name="delete_case"),
+
+    # 任务管理
+    path('task_manage/', testtask_views.TaskManage.as_view(), name="task_manage"),
+    path('add_task/', testtask_views.AddTask.as_view(), name="add_task"),
+    path('get_case_list/', testtask_api.GetCaseList.as_view(), name="get_case_list"),
+    path('save_task_data/', testtask_api.SaveTaskData.as_view(), name="save_task_data"),
 ]
