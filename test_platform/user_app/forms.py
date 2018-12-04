@@ -3,7 +3,7 @@ __data__ = ' 21:15'
 
 from django import forms
 
-from .models import UserInfo
+from .user_models import UserInfo
 
 
 class LoginForm(forms.Form):

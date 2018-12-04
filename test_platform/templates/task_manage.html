@@ -80,20 +80,27 @@
               {% for testtask in testtasks %}
                 <tr h-id="{{ testtask.nid }}" b-id="{{ testtask.business_id }}">
                      <td>{{ forloop.counter|add:start }}</td>
-                      <td>{{ testtask.task_name }}</td>
-                      <td>{{ testtask.task_describe }}</td>
-                      <td>{{ testtask.task_status }}</td>
-                      <td>{{ testtask.task_creator }}</td>
+                      <td>{{ testtask.name }}</td>
+                      <td>{{ testtask.describe }}</td>
+                      <td>{{ testtask.status }}</td>
+                      <td>{{ testtask.creator }}</td>
                       <td>{{ testtask.create_time }}</td>
                   <td>
                       <div class="btn-group operation">
                       <button class="btn btn-sm btn-info " id="alter_task_btn" type="button"
-                                onclick="window.location.href='/interface/debug_case/{{testcase.id}}/'"/>
-                                调试</button>
+                                onclick="window.location.href='/interface/view_task/{{testtask.id}}/'"/>
+                                查看</button>
                       </div>
+
                       <div class="btn-group operation">
-                      <button class="btn btn-sm btn-danger " id="delete_case_btn" type="button"
-                      onclick="window.location.href='/interface/delete_case/{{testcase.id}}'"/>删除</button>
+                      <button class="btn btn-sm btn-info " id="run_task_btn" type="button"
+                                onclick="window.location.href='/interface/running_task/{{testtask.id}}/'"/>
+                                执行</button>
+                      </div>
+
+                      <div class="btn-group operation">
+                      <button class="btn btn-sm btn-danger " id="delete_task_btn" type="button"
+                      onclick="window.location.href='/interface/delete_case/{{testtask.id}}'"/>删除</button>
                       </div>
                   </td>
                 </tr>

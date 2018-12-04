@@ -1,6 +1,6 @@
 from django.db import models
 from project_app.models import Module
-from user_app.models import UserInfo
+from django.contrib.auth.models import User
 
 task_status_choice = (
 	('y0', '未执行'),
@@ -45,7 +45,7 @@ class TestTask(models.Model):
 	name = models.CharField(verbose_name="任务名称", max_length=100, blank=False)
 	describe = models.TextField(verbose_name="任务描述", max_length=100, default="")
 	status = models.CharField(verbose_name="任务状态", default="y0", max_length=10, choices=task_status_choice)
-	creator = models.ForeignKey(UserInfo, on_delete=models.CASCADE, default="", verbose_name="任务创建者" )
+	creator = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name="任务创建者" )
 	create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
 	case_id = models.ManyToManyField(TestCase)
 
@@ -62,7 +62,7 @@ class TestTaskRecord(models.Model):
 	测试任务执行记录
 	"""
 	testtask_id = models.ForeignKey(TestTask, on_delete=models.CASCADE, verbose_name="测试任务id")
-	operator = models.ForeignKey(UserInfo, on_delete=models.CASCADE, verbose_name="任务执行者" )
+	operator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="任务执行者" )
 	result =  models.BooleanField(verbose_name="任务执行结果")  # True:成功，False: 失败
 	work_start_time = models.DateTimeField(verbose_name="任务开始时间")
 	work_end_time = models.DateTimeField(verbose_name="任务结束时间")

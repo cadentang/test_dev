@@ -1,4 +1,5 @@
 from django.views.generic.base import View
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from ..models import TestCase, TestTask, TestTaskRecord
 from project_app.models import Project, Module
@@ -10,15 +11,18 @@ class SaveTaskData(View):
 	def post(self, request):
 		task_name = request.POST.get("task_name", "")
 		task_describe = request.POST.get("task_describe", "")
-		task_status = request.POST.get("task_status", "")
 		task_creator = request.POST.get("task_creator", "")
 		task_cases= request.POST.get("task_cases", "")
+		cases_id = list(task_cases.replace(',', ''))
+		creator_id = User.objects.get(username=task_creator)
 		if task_name=="":
 			return common.response_failed("任务名称不能为空！")
-		task = TestTask.objects.create(name=task_name,ddescribe=task_describe, status=task_status,
-		                               creator=task_creator, case_id=task_cases,)
+		task = TestTask.objects.create(name=task_name,describe=task_describe, creator=creator_id)
+		cases = TestCase.objects.filter(id__in=cases_id)
+		for case in cases:
+			task.case_id.add(case)
 		if task is not None:
-			return HttpResponse("保存成功!")
+			return common.response_succeed(data=[])
 
 
 class GetCaseList(View):
