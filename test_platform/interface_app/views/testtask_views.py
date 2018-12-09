@@ -29,9 +29,19 @@ class TaskManage(View):
 
 
 class AddTask(View):
-	"""创建任务页面"""
+	"""
+	创建任务页面
+	"""
 	def get(self, request):
 		return render(request, "add_task.html", {"type": "add"})
+
+
+class RunTask(View):
+	"""
+	运行测试任务视图
+	"""
+	def get(self, request, task_id):
+		queryset = TestTask.objects.get
 
 
 

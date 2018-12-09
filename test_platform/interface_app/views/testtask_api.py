@@ -7,7 +7,9 @@ from test_platform import common
 
 
 class SaveTaskData(View):
-	"""保存任务视图"""
+	"""
+	保存任务视图
+	"""
 	def post(self, request):
 		task_name = request.POST.get("task_name", "")
 		task_describe = request.POST.get("task_describe", "")
@@ -47,7 +49,9 @@ class GetCaseList(View):
 
 
 class DeleteTask(View):
-	"""删除任务"""
+	"""
+	删除任务
+	"""
 	def get(self, request, task_id):
 		TestTask.objects.get(pk=task_id).delete()
 		return HttpResponseRedirect("/interface/task_manage/")

@@ -21,6 +21,8 @@
 
             <div class="form-group">
 				<label>选择用例：</label>
+                <input type="checkbox" id="select_all" name="select_all" value="">全选/取消
+                <input type="checkbox" id="select_all_return" name="select_all" value="">反选
                 <div class="caseList" style="overflow-y:scroll; height: 200px; background: #FFFFFF; padding-left: 15px;">
 				</div>
 			</div>
@@ -44,24 +46,17 @@
 			let task_name = $("#task_name").val();
 			let task_describe = $("#task_describe").val();
 			let task_creator = $("#user_name").text();
-			console.log("111",task_name);
-			console.log("222",task_describe);
-			console.log("333",task_creator);
 			if (task_name === "") {
 				window.alert("任务的名称不能为空！");
 			}
 			let selectCases = document.querySelectorAll("div.caseList > input");
-			//var selectCasesId = new Array()
 			var selectCasesId = "";
 			for (let i = 0; i < selectCases.length; i++) {
-				//window.alert("1111");
 				if (selectCases[i].checked === true){
 					let case_id = selectCases[i].value;
-					//selectCasesId.push(case_id);
 					selectCasesId = selectCasesId + case_id + ","
 				}
 			}
-			console.log("选中的用例id", selectCasesId);
 			$.post("/interface/save_task_data/", {
 				"task_name": task_name,
 				"task_describe": task_describe,
@@ -75,6 +70,33 @@
 				}
 			});
 		});
+
+	    //全选或者取消选择的用例
+	    $("#select_all").click(function(){
+	        let selects = document.querySelectorAll("div.caseList>input");
+            if (document.getElementById("select_all").checked === true){
+                for (let j=0; j<selects.length; j++){
+                    selects[j].checked = true;
+                }
+            }else{
+                for (let i=0; i<selects.length; i++){
+                    selects[i].checked = false;
+                }
+            }
+        });
+
+        //反选
+        $("#select_all_return").click(function () {
+            let selects = document.querySelectorAll("div.caseList>input");
+            for (let j=0; j<selects.length; j++){
+                if (selects[j].checked === true){
+                    selects[j].checked = false;
+                }else {
+                    selects[j].checked = true;
+                }
+            }
+        });
+
 </script>
 
 

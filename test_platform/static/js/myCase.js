@@ -49,7 +49,6 @@ var CaseListInit = function(){
     function getCaseListInfo() {
         $.get("/interface/get_case_list", {}, function (resp) {
             if (resp.success === "true"){
-                console.log(resp.data);
                 let cases = resp.data;
                 for (let i=0; i<cases.length; i++){
                     let option = '<input type="checkbox" name="' + cases[i].name
@@ -59,7 +58,6 @@ var CaseListInit = function(){
 
                 let devCaseList = document.querySelector(".caseList");
                 devCaseList.innerHTML = options;
-                console.log("最后：", options);
             }else {
                 window.alert(resp.message);
             }

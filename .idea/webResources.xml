@@ -6,6 +6,9 @@
         <entryData>
           <resourceRoots>
             <path value="file://$PROJECT_DIR$/test_platform/project_app" />
+            <path value="file://$PROJECT_DIR$/test_platform/user_app" />
+            <path value="file://$PROJECT_DIR$/test_platform/interface_app" />
+            <path value="file://$PROJECT_DIR$/test_platform/test_platform" />
           </resourceRoots>
         </entryData>
       </entry>
