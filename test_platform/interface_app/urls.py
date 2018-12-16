@@ -18,6 +18,10 @@ urlpatterns = [
     # 任务管理
     path('task_manage/', testtask_views.TaskManage.as_view(), name="task_manage"),
     path('add_task/', testtask_views.AddTask.as_view(), name="add_task"),
+    path('run_task/<int:task_id>', testtask_views.RunTask.as_view(), name="run_task"),
+
+    # 任务接口
     path('get_case_list/', testtask_api.GetCaseList.as_view(), name="get_case_list"),
     path('save_task_data/', testtask_api.SaveTaskData.as_view(), name="save_task_data"),
+    path('delete_task/<int:task_id>', testtask_api.DeleteTask.as_view(), name="delete_task"),
 ]

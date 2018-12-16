@@ -4,8 +4,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from ..models import TestTask, TestTaskRecord
-
+from ..models import TestTask, TestTaskRecord, TestCase
+from test_platform import common
+from ..apps import TASK_PATH, RUN_TASK_FILE
+import os, sys, json
+from ..extend.task_run import run_cases
 
 class TaskManage(View):
 	"""
@@ -41,9 +44,36 @@ class RunTask(View):
 	运行测试任务视图
 	"""
 	def get(self, request, task_id):
-		queryset = TestTask.objects.get
+		not_run_task_status_choice = ["y1", "y2", "y3"]
+		queryset = TestTask.objects.get(id=task_id)
+		task_cases = queryset.case_id.all()
+		print("tast_case", task_cases)
+		if queryset.status not in not_run_task_status_choice:
+			queryset.status = "y1"
+			queryset.save()
+		else:
+			return common.response_succeed(message="当前状态不能执行任务：%s" %(queryset.name))
+		task_cases_dict = {}
+		for task_case in task_cases:
+			task_case_dict = {
+				"response_url": task_case.response_url,
+				"response_method": task_case.response_method,
+				"response_type": task_case.response_type,
+				"response_header": task_case.response_header,
+				"response_parameter": task_case.response_parameter,
+				"response_assert": task_case.response_assert,
+			}
+			task_cases_dict[task_case.id] = task_case_dict
 
+		case_data_file = TASK_PATH + "cases_data.json"
+		print("存于后端的数据-----", task_cases_dict)
+		with open(case_data_file, "w+") as f:
+			f.write(task_cases_dict)
+		print(RUN_TASK_FILE)
+		# os.system("python " + RUN_TASK_FILE)
+		run_cases()
 
+		return HttpResponseRedirect("/interface/task_manage")
 
 
 

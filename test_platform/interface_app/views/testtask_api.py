@@ -54,6 +54,7 @@ class DeleteTask(View):
 	"""
 	def get(self, request, task_id):
 		TestTask.objects.get(pk=task_id).delete()
+
 		return HttpResponseRedirect("/interface/task_manage/")
 
 
