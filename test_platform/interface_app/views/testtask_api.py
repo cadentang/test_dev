@@ -108,6 +108,7 @@ class UpdataTaskView(View):
 	更新测试任务
 	"""
 	def post(self, request):
+		pass
 
 
 

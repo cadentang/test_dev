@@ -10,6 +10,7 @@ import sys, unittest
 from os.path import dirname, abspath
 from ..models import TestTask
 
+
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 BASE_PATH = BASE_DIR.replace("\\", "/")
 sys.path.append(BASE_PATH)
@@ -90,6 +91,7 @@ def run_cases():
 # 	import django  # 加载django
 #
 # 	django.setup() # 启动django
+
 # 	run_cases()
 
 
