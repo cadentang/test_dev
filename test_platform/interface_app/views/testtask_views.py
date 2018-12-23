@@ -1,14 +1,18 @@
+import os, sys, json
+
 from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from ..models import TestTask, TestTaskRecord, TestCase
 from test_platform import common
 from ..apps import TASK_PATH, RUN_TASK_FILE
-import os, sys, json
 from ..extend.task_run import run_cases
+from ..extend.task_thread import TaskThread
+
 
 class TaskManage(View):
 	"""
@@ -47,12 +51,11 @@ class RunTask(View):
 		not_run_task_status_choice = ["y1", "y2", "y3"]
 		queryset = TestTask.objects.get(id=task_id)
 		task_cases = queryset.case_id.all()
-		print("tast_case", task_cases)
 		if queryset.status not in not_run_task_status_choice:
-			queryset.status = "y1"
-			queryset.save()
+			TaskThread(task_id).new_run()
 		else:
 			return common.response_succeed(message="当前状态不能执行任务：%s" %(queryset.name))
+
 		task_cases_dict = {}
 		for task_case in task_cases:
 			task_case_dict = {
@@ -65,12 +68,16 @@ class RunTask(View):
 			}
 			task_cases_dict[task_case.id] = task_case_dict
 
+		task_cases_json = json.dumps(task_cases_dict)
 		case_data_file = TASK_PATH + "cases_data.json"
-		print("存于后端的数据-----", task_cases_dict)
+		print(">>>>存入json文件的数据类型:", type(task_cases_json))
+		print("存于后端的数据-----", task_cases_json)
 		with open(case_data_file, "w+") as f:
-			f.write(task_cases_dict)
+			f.write(task_cases_json)
 		print(RUN_TASK_FILE)
-		# os.system("python " + RUN_TASK_FILE)
+		# os.popen("F:")
+		# os.popen("cd F:/test_dev_env/test_dev_env/Scripts")
+		# os.popen("python " + RUN_TASK_FILE)
 		run_cases()
 
 		return HttpResponseRedirect("/interface/task_manage")

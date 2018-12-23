@@ -24,4 +24,5 @@ urlpatterns = [
     path('get_case_list/', testtask_api.GetCaseList.as_view(), name="get_case_list"),
     path('save_task_data/', testtask_api.SaveTaskData.as_view(), name="save_task_data"),
     path('delete_task/<int:task_id>', testtask_api.DeleteTask.as_view(), name="delete_task"),
+    path('get_task_info/<int:task_id>', testtask_api.GetTaskInfo.as_view(), name="get_task_info"),
 ]

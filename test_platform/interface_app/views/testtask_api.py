@@ -1,6 +1,7 @@
 from django.views.generic.base import View
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+
 from ..models import TestCase, TestTask, TestTaskRecord
 from project_app.models import Project, Module
 from test_platform import common
@@ -56,6 +57,59 @@ class DeleteTask(View):
 		TestTask.objects.get(pk=task_id).delete()
 
 		return HttpResponseRedirect("/interface/task_manage/")
+
+
+class TestTaskRecordListView(View):
+	"""
+	获取一个任务所有执行记录的list
+	"""
+	def post(self, request):
+		task_id = request.POST.get("task_id", "")
+		task_queryset = TestTaskRecord.objects.filter(testtask_id_id=task_id)
+		return common.response_succeed(message="获取成功！", data=task_queryset)
+
+
+class GetTestTaskRecordDescribleView(View):
+	"""
+	获取一次测试记录的结果
+	"""
+	def post(self, request):
+		task_record_id = request.POST.get("task_record_id", "")
+		queryset = TestTaskRecord.objects.get(id=task_record_id)
+		return common.response_succeed(message="记录获取成功!", data=queryset)
+
+
+class GetTaskInfo(View):
+	"""
+	获取测试任务的详细信息
+	"""
+	def post(self, request):
+		task_id = request.POST.get("task_id", "")
+		if task_id == "":
+			return common.response_failed("任务ID不能为空！")
+
+		queryset = TestTask.objects.get(id=task_id)
+		task_cases = queryset.case_id.all()
+		creator = User.objects.get(id=queryset.creator_id)
+
+		task_info = {
+			"id": queryset.id,
+			"name": queryset.name,
+			"status": queryset.status,
+			"describe": queryset.describe,
+			"creator": creator,
+			"cases": task_cases,
+		}
+		return common.response_succeed(message="请求成功!", data=task_info)
+
+
+class UpdataTaskView(View):
+	"""
+	更新测试任务
+	"""
+	def post(self, request):
+
+
 
 
 

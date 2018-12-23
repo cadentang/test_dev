@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<testsuite errors="0" failures="0" name="interface_app.extend.task_run.InterfaceTest-20181223123005" tests="1" time="0.089">
+	<testcase classname="interface_app.extend.task_run.InterfaceTest" name="test_cun_cases_00001_17" time="0.089"/>
+	<system-out>
+<![CDATA[>>>请求url： http://api.hhtdlng.com/bpm/api/v1/consumer/?consumer_name=&short_name_id=&contact_phone=&sale_man_name=&short_name=%E8%88%9F%E5%B1%B1%E5%A4%A9%E7%89%A9&consumer_type=&page=1
+>>>请求方法： get
+>>>请求数据类型： form-data
+>>>请求头部： {"Authorization": "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZmFlMGUyZDgtYmQ3YS00ZmUyLTg4NDQtNjY5YzFlYzA2MjVjIiwidXNlcm5hbWUiOiIxNTI3NTQ1Nzg4OCIsImV4cCI6MTU0NjAxMjE0NCwibW9iaWxlX251bWJlciI6IjE1Mjc1NDU3ODg4In0.DXF1_Zog8b4Az-twrsatF6YKAqa8jRRqvr5Sq8tZuJw"}
+>>>请求参数： {}
+>>>用例断言： 
+]]>	</system-out>
+	<system-err>
+<![CDATA[]]>	</system-err>
+</testsuite>

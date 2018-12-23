@@ -1,10 +1,1 @@
-{17: {'response_assert',
-  'response_header',
-  'get', 'response_method',
-  '', '{}',
-  '{"Authorization": "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZmFlMGUyZDgtYmQ3YS00ZmUyLTg4NDQtNjY5YzFlYzA2MjVjIiwidXNlcm5hbWUiOiIxNTI3NTQ1Nzg4OCIsImV4cCI6MTU0NjAxMjE0NCwibW9iaWxlX251bWJlciI6IjE1Mjc1NDU3ODg4In0.DXF1_Zog8b4Az-twrsatF6YKAqa8jRRqvr5Sq8tZuJw"}',
-  'http://api.hhtdlng.com/bpm/api/v1/consumer/?consumer_name=&short_name_id=&contact_phone=&sale_man_name=&short_name=%E8%88%9F%E5%B1%B1%E5%A4%A9%E7%89%A9&consumer_type=&page=1',
-  'response_type',
-  'response_url',
-  'response_parameter',
-  'form-data'}}
+{"17": {"response_url": "http://api.hhtdlng.com/bpm/api/v1/consumer/?consumer_name=&short_name_id=&contact_phone=&sale_man_name=&short_name=%E8%88%9F%E5%B1%B1%E5%A4%A9%E7%89%A9&consumer_type=&page=1", "response_method": "get", "response_type": "form-data", "response_header": "{\"Authorization\": \"jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZmFlMGUyZDgtYmQ3YS00ZmUyLTg4NDQtNjY5YzFlYzA2MjVjIiwidXNlcm5hbWUiOiIxNTI3NTQ1Nzg4OCIsImV4cCI6MTU0NjAxMjE0NCwibW9iaWxlX251bWJlciI6IjE1Mjc1NDU3ODg4In0.DXF1_Zog8b4Az-twrsatF6YKAqa8jRRqvr5Sq8tZuJw\"}", "response_parameter": "{}", "response_assert": ""}}

@@ -67,7 +67,18 @@ class TestTaskRecord(models.Model):
 	work_start_time = models.DateTimeField(verbose_name="任务开始时间")
 	work_end_time = models.DateTimeField(verbose_name="任务结束时间")
 	create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
+	name = models.CharField(verbose_name="名称", max_length=100, blank=False, default="")
+	error = models.IntegerField(verbose_name="错误用例")
+	failure = models.IntegerField(verbose_name="失败用例")
+	skipped = models.IntegerField(verbose_name="跳过用例")
+	tests = models.IntegerField(verbose_name="总用例数")
+	run_time = models.FloatField(verbose_name="运行时长")
+	result_describle = models.TextField(verbose_name="详细", default="")
+
 
 	class Meta:
 		verbose_name = "任务执行记录表"
 		verbose_name_plural = verbose_name
+
+	def __str__(self):
+		return self.name
